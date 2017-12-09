@@ -48,13 +48,22 @@ public class GithubQuerier {
                 sb.append("<a data-toggle=\"collapse\" href=\"#event-" + i + "\">JSON</a>");
                 sb.append("<div id=event-" + i + " class=\"collapse\" style=\"height: auto;\"> <pre>");
                 sb.append(event.toString());
-                sb.append("</pre> </div>");
+                sb.append("</pre> </div><br/><br/>");
 
                 JSONObject pay= event.getJSONObject("payload");
-                JSONObject commits= event.getJSONObject("commits");
+                JSONArray commits = pay.getJSONArray("commits");
 
-                sb.append("<p>" + commits.toString() + "</p>");
-
+                //sb.append("<b>Commits</b>: <br/>");
+                sb.append("<table>" +
+                        "  <tr>\n" +
+                        "    <th>Commit SHA</th>\n" +
+                        "    <th>Commit Message</th>\n" +
+                        "  </tr>");
+                for (int j = 0; j < commits.length(); j++) {
+                    sb.append("<tr> <td style=\"padding:0 50px 0 0;\">" + commits.getJSONObject(j).getString("sha") + "</td>");
+                    sb.append("<td style=\"padding:0 50px 0 0;\">" + commits.getJSONObject(j).getString("message") + "</td></tr>");
+                }
+                sb.append("</table><hr>");
             }
         }
         sb.append("</div>");
